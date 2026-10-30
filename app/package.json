@@ -1,0 +1,7 @@
+{
+  "name": "livraria-exemplo",
+  "private": true,
+  "type": "module",
+  "description": "Projeto pequeno em que a equipe de agentes trabalha nos exercícios do livro.",
+  "scripts": { "test": "node --test testes/" }
+}
