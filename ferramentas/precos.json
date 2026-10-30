@@ -1,0 +1,8 @@
+{
+  "_fonte": "Tabela de preços da API Anthropic (US$ por milhão de tokens), conferida em 30/out/2026 na referência oficial (claude-api, cache de 2026-10-06). Cache: escrita 5 min = 1,25x a entrada; escrita 1 h = 2x a entrada. Confira em https://platform.claude.com/docs/en/about-claude/pricing antes de usar o número em decisão.",
+  "_aviso": "No plano de assinatura do Claude Code você não paga por token: este preço serve para comparar o peso de cada modelo, agente e tarefa.",
+  "fable": { "entrada": 10.0, "saida": 50.0, "cacheLeitura": 0.25, "cacheEscrita5m": 12.5, "cacheEscrita1h": 20.0 },
+  "opus": { "entrada": 4.0, "saida": 20.0, "cacheLeitura": 0.2, "cacheEscrita5m": 5.0, "cacheEscrita1h": 8.0 },
+  "sonnet": { "entrada": 2.0, "saida": 10.0, "cacheLeitura": 0.2, "cacheEscrita5m": 2.5, "cacheEscrita1h": 4.0 },
+  "haiku": { "entrada": 0.1, "saida": 0.5, "cacheLeitura": 0.01, "cacheEscrita5m": 0.125, "cacheEscrita1h": 0.2, "_nota": "cacheLeitura estimada pela regra geral de 0,1x a entrada; preço vale para prompt de até 100 mil tokens" }
+}
