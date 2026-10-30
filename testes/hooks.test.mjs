@@ -53,6 +53,25 @@ test('hook proteger-segredos: barra Read de .env e cat .env', () => {
   assert.equal(rodar('proteger-segredos.mjs', { tool_name: 'Read', tool_input: { file_path: 'README.md' } }).codigo, 0);
 });
 
+test('regras: PowerShell e cmd destrutivos (no Windows o agente usa a PowerShell)', () => {
+  for (const c of ['Remove-Item -Recurse -Force .\\lixo', 'Remove-Item .\\lixo -Force -Recurse', 'rm -r -fo lixo', 'rd /s /q lixo', 'rmdir /s /q C:\\proj', 'del /f /s /q *.*', 'Clear-Disk -Number 1']) {
+    assert.ok(avaliar(c), `devia barrar: ${c}`);
+  }
+  for (const c of ['Remove-Item arquivo.txt', 'Get-ChildItem -Recurse', 'Test-Path lixo', 'Remove-Item -Recurse pasta-vazia']) {
+    assert.equal(avaliar(c), null, `não devia barrar: ${c}`);
+  }
+});
+
+test('regras: PowerShell que imprimiria segredo', () => {
+  for (const c of ['echo $env:OPENAI_API_KEY', 'Write-Output $env:GITHUB_TOKEN']) assert.ok(comandoLeSegredo(c), c);
+  assert.ok(!comandoLeSegredo('Write-Output $env:PATH'));
+});
+
+test('hook barrar-destrutivos também vê a ferramenta PowerShell', () => {
+  assert.equal(rodar('barrar-destrutivos.mjs', { tool_name: 'PowerShell', tool_input: { command: 'Remove-Item -Recurse -Force lixo' } }).codigo, 2);
+  assert.equal(rodar('barrar-destrutivos.mjs', { tool_name: 'PowerShell', tool_input: { command: 'Get-ChildItem' } }).codigo, 0);
+});
+
 test('hook com stdin vazio ou quebrado não trava e libera', () => {
   const r = spawnSync(process.execPath, [join(HOOKS, 'barrar-destrutivos.mjs')], { input: 'isto não é json', encoding: 'utf8' });
   assert.equal(r.status, 0);

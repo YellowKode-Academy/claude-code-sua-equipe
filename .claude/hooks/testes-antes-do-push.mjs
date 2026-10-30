@@ -6,7 +6,7 @@ import { lerEntrada, barrar, liberar } from './lib.mjs';
 
 const e = lerEntrada();
 const comando = e.tool_input?.command || '';
-if (e.tool_name !== 'Bash' || !/\bgit\s+push\b/.test(comando)) liberar();
+if (!['Bash', 'PowerShell'].includes(e.tool_name) ||!/\bgit\s+push\b/.test(comando)) liberar();
 
 const raiz = process.env.CLAUDE_PROJECT_DIR || e.cwd || process.cwd();
 const r = spawnSync(process.execPath, ['--test', 'testes/', 'app/testes/'], { cwd: raiz, encoding: 'utf8', timeout: 120_000 });

@@ -36,14 +36,14 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/barrar-destrutivos.mjs\"", "timeout": 10 },
           { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/testes-antes-do-push.mjs\"", "timeout": 180 }
         ]
       },
       {
-        "matcher": "Read|Edit|Write|Bash",
+        "matcher": "Read|Edit|Write|Bash|PowerShell",
         "hooks": [
           { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/proteger-segredos.mjs\"", "timeout": 10 }
         ]

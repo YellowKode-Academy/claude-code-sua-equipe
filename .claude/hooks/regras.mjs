@@ -9,6 +9,10 @@ export const PERIGOSOS = [
   [/\b(drop\s+(database|schema|table)|truncate\s+table)\b/i, 'DROP ou TRUNCATE no banco'],
   [/\bmkfs(\.\w+)?\b|\bdd\s+if=|\bformat-volume\b/i, 'formatar disco'],
   [/\brsync\b.*\s--delete\b/i, 'rsync --delete (já apagou um banco em produção)'],
+  // PowerShell e cmd: no Windows o agente usa a ferramenta PowerShell, não a Bash.
+  [/\b(remove-item|ri|rm|del|erase|rmdir|rd)\b(?=.*\s-r(ecurse)?\b)(?=.*\s-fo(rce)?\b)/i, 'Remove-Item recursivo e forçado'],
+  [/\b(rd|rmdir)\s+\/s\b|\bdel\s+(\/[a-z]\s+)*\/s\b/i, 'rd /s ou del /s (apagar pasta inteira no cmd)'],
+  [/\b(clear-disk|initialize-disk|remove-partition)\b/i, 'apagar disco ou partição'],
 ];
 
 export function avaliar(comando = '') {
@@ -23,6 +27,7 @@ const LER_SEGREDO_NO_TERMINAL = [
   /\b(printenv|env)\s*($|[|;&>])/i,
   /\bget-childitem\s+env:/i,
   /\becho\s+["']?\$\{?[A-Z0-9_]*(KEY|TOKEN|SECRET|PASSWORD|SENHA)\b/i,
+  /\b(echo|write-output|write-host)\s+["']?\$env:[A-Z0-9_]*(KEY|TOKEN|SECRET|PASSWORD|SENHA)\b/i,
 ];
 
 export function arquivoSecreto(caminho = '') {
