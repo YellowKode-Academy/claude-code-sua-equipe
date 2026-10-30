@@ -27,3 +27,11 @@ O registro do hook `registrar-uso` (que usa o medidor) para a rodada do B1: saí
 
 ## B6. No transcript, a mesma resposta aparece em várias linhas
 Num transcript real desta casa: 331 linhas com `usage`, 156 respostas únicas (`message.id`). Somar linha a linha daria 2,1 vezes o gasto real. O medidor conta cada resposta uma vez.
+
+## B7. Rotina pelo Agendador de Tarefas do Windows, sem sessão aberta (30/out/2026)
+- Tarefa única registrada com `Register-ScheduledTask` (mesmos comandos de `rotinas/agendar-windows.ps1`), rodando `node rotinas/rotina-diaria.mjs --modelo haiku` na pasta da bancada.
+- Disparou às 15:27:02; o Agendador registrou resultado **0** (sucesso).
+- `rotinas/logs/historico.jsonl`: `{"ok":true,"custo":0.0032,"turnos":1,"primeiraLinha":"rotina ok"}`, e o JSON completo do dia em `rotinas/logs/2026-10-30.json`.
+- O `claude -p` autenticou sozinho pela conta já logada na máquina (plano de assinatura); nenhuma janela abriu.
+- A tarefa provisória foi apagada em seguida (`Unregister-ScheduledTask`).
+- Lembrete do B3: numa pasta nunca aberta no modo interativo, a rotina roda, mas sem as liberações do projeto. Para a rotina rodar teste, abra o projeto uma vez antes de agendar.
