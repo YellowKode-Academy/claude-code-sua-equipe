@@ -72,9 +72,20 @@ test('hook barrar-destrutivos também vê a ferramenta PowerShell', () => {
   assert.equal(rodar('barrar-destrutivos.mjs', { tool_name: 'PowerShell', tool_input: { command: 'Get-ChildItem' } }).codigo, 0);
 });
 
-test('hook com stdin vazio ou quebrado não trava e libera', () => {
-  const r = spawnSync(process.execPath, [join(HOOKS, 'barrar-destrutivos.mjs')], { input: 'isto não é json', encoding: 'utf8' });
-  assert.equal(r.status, 0);
+test('hook de guarda: stdin vazio libera, stdin ilegível barra (na dúvida, um guarda barra)', () => {
+  const vazio = spawnSync(process.execPath, [join(HOOKS, 'barrar-destrutivos.mjs')], { input: '', encoding: 'utf8' });
+  assert.equal(vazio.status, 0);
+  const quebrado = spawnSync(process.execPath, [join(HOOKS, 'barrar-destrutivos.mjs')], { input: 'isto não é json', encoding: 'utf8' });
+  assert.equal(quebrado.status, 2);
+});
+
+test('hook de guarda: JSON com BOM no começo continua sendo lido e barrado', () => {
+  const perigoso = JSON.stringify({ tool_name: 'PowerShell', tool_input: { command: 'Remove-Item -Recurse -Force lixo' } });
+  const comBom = spawnSync(process.execPath, [join(HOOKS, 'barrar-destrutivos.mjs')], { input: '﻿' + perigoso, encoding: 'utf8' });
+  assert.equal(comBom.status, 2);
+  assert.match(comBom.stderr, /Remove-Item recursivo/);
+  const comCrlf = spawnSync(process.execPath, [join(HOOKS, 'proteger-segredos.mjs')], { input: '﻿' + JSON.stringify({ tool_name: 'Read', tool_input: { file_path: '.env' } }) + '\r\n', encoding: 'utf8' });
+  assert.equal(comCrlf.status, 2);
 });
 
 test('hook testes-antes-do-push: barra o push quando um teste falha', () => {

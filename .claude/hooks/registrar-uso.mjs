@@ -5,7 +5,7 @@ import { join, dirname } from 'node:path';
 import { lerEntrada, liberar } from './lib.mjs';
 import { lerRespostas } from '../../ferramentas/medir-tokens.mjs';
 
-const e = lerEntrada();
+const e = lerEntrada() || {};
 if (e.transcript_path && existsSync(e.transcript_path)) {
   const rs = lerRespostas({ arquivo: e.transcript_path, projeto: '', sessao: e.session_id, agente: e.agent_type || 'sessão principal' });
   const soma = k => rs.reduce((s, r) => s + r[k], 0);

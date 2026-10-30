@@ -1,12 +1,12 @@
-// PreToolUse (Bash): antes de qualquer "git push", roda os testes.
+// PreToolUse (Bash e PowerShell): antes de qualquer "git push", roda os testes.
 // Teste vermelho = push barrado. É a regra escrita que virou código.
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
-import { lerEntrada, barrar, liberar } from './lib.mjs';
+import { lerEntradaOuBarrar, barrar, liberar } from './lib.mjs';
 
-const e = lerEntrada();
+const e = lerEntradaOuBarrar();
 const comando = e.tool_input?.command || '';
-if (!['Bash', 'PowerShell'].includes(e.tool_name) ||!/\bgit\s+push\b/.test(comando)) liberar();
+if (!['Bash', 'PowerShell'].includes(e.tool_name) || !/\bgit\s+push\b/.test(comando)) liberar();
 
 const raiz = process.env.CLAUDE_PROJECT_DIR || e.cwd || process.cwd();
 const r = spawnSync(process.execPath, ['--test', 'testes/', 'app/testes/'], { cwd: raiz, encoding: 'utf8', timeout: 120_000 });
