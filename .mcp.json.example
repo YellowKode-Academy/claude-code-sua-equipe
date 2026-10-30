@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "playwright-desktop": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.83", "--isolated", "--headless", "--viewport-size", "1366x768"]
+    },
+    "playwright-mobile": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.83", "--isolated", "--headless", "--device", "iPhone 15"]
+    }
+  }
+}

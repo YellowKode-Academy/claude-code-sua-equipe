@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "model": "opus",
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet"
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(node --test *)",
+      "Bash(node ferramentas/*)",
+      "Bash(npm test *)",
+      "Bash(npm run *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "mcp__playwright-desktop__*",
+      "mcp__playwright-mobile__*"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(git merge *)",
+      "Bash(npm publish *)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/*.pem)",
+      "Bash(rm -rf *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/barrar-destrutivos.mjs\"", "timeout": 10 },
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/testes-antes-do-push.mjs\"", "timeout": 180 }
+        ]
+      },
+      {
+        "matcher": "Read|Edit|Write|Bash",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/proteger-segredos.mjs\"", "timeout": 10 }
+        ]
+      }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/registrar-uso.mjs\"", "timeout": 30 }] }
+    ],
+    "SubagentStop": [
+      { "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/registrar-uso.mjs\"", "timeout": 30 }] }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node .claude/statusline.mjs",
+    "refreshInterval": 5
+  }
+}
