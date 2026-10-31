@@ -114,6 +114,18 @@ test('hook registrar-uso: grava o uso da sessão a partir do transcript', () => 
   assert.deepEqual(reg.modelos, ['claude-sonnet-5-5']);
 });
 
+test('hook registrar-uso no SubagentStop: grava o tipo do subagente', () => {
+  const proj = mkdtempSync(join(tmpdir(), 'uso-sub-'));
+  const transcript = join(proj, 'agent-x.jsonl');
+  writeFileSync(transcript, JSON.stringify({ type: 'assistant', timestamp: '2026-10-30T10:00:00Z', message: { id: 'm1', model: 'claude-haiku-5-5', usage: { input_tokens: 3, output_tokens: 40, cache_read_input_tokens: 500, cache_creation_input_tokens: 0 } } }));
+  const r = rodar('registrar-uso.mjs', { hook_event_name: 'SubagentStop', session_id: 's1', agent_type: 'pesquisador', transcript_path: transcript, cwd: proj }, { CLAUDE_PROJECT_DIR: proj });
+  assert.equal(r.codigo, 0);
+  const reg = JSON.parse(readFileSync(join(proj, '.claude', 'logs', 'uso.jsonl'), 'utf8').trim());
+  assert.equal(reg.evento, 'SubagentStop');
+  assert.equal(reg.agente, 'pesquisador');
+  assert.deepEqual(reg.modelos, ['claude-haiku-5-5']);
+});
+
 test('statusline: mostra modelo, contexto, custo e alerta de contexto cheio', () => {
   const r = spawnSync(process.execPath, [join(RAIZ, '.claude', 'statusline.mjs')], {
     input: JSON.stringify({ model: { display_name: 'Opus 5.5' }, context_window: { used_percentage: 81.4 }, cost: { total_cost_usd: 1.234 }, rate_limits: { five_hour: { used_percentage: 37 } } }),

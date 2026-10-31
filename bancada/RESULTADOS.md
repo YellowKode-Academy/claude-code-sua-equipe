@@ -35,3 +35,17 @@ Num transcript real desta casa: 331 linhas com `usage`, 156 respostas únicas (`
 - O `claude -p` autenticou sozinho pela conta já logada na máquina (plano de assinatura); nenhuma janela abriu.
 - A tarefa provisória foi apagada em seguida (`Unregister-ScheduledTask`).
 - Lembrete do B3: numa pasta nunca aberta no modo interativo, a rotina roda, mas sem as liberações do projeto. Para a rotina rodar teste, abra o projeto uma vez antes de agendar.
+
+## B8. Resumidor de JSON num arquivo de 300 pedidos que você pode gerar (31/out/2026)
+- `node bancada/dados/gerar-pedidos.mjs 300 > bancada/dados/pedidos-300.json`: sempre o mesmo arquivo, 291.872 caracteres (cliente com endereço, 4 itens e 5 eventos de histórico por pedido).
+- `node ferramentas/resumir-json.mjs bancada/dados/pedidos-300.json --lista data.items ...`:
+
+| Opções | Saída (caracteres) | Vezes menor que a entrada |
+|---|---:|---:|
+| `--campos id,status,total --limite 3` | 268 | ~1.089 |
+| `--contar status` | 98 | ~2.978 |
+| `--campos id,status,total` (limite padrão: 20 itens) | 1.510 | ~193 |
+| `--campos id,status,total --limite 300` (os 300 pedidos) | 21.951 | ~13 |
+
+- O resumidor mede caracteres, não tokens: a economia em token não foi medida.
+- O teste do hook `registrar-uso` agora cobre também o `SubagentStop` (grava o tipo do subagente).
