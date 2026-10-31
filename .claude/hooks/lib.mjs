@@ -3,14 +3,14 @@
 import { readFileSync } from 'node:fs';
 
 // Devolve o objeto lido, {} quando o stdin vem vazio, ou null quando há texto que não é JSON.
-// O BOM (﻿) que o Windows às vezes põe no começo é removido antes: sem isso o JSON.parse
+// O BOM (U+FEFF) que o Windows às vezes põe no começo é removido antes: sem isso o JSON.parse
 // falha e um hook de guarda que "libera na dúvida" deixaria passar o comando perigoso.
 export function lerEntrada(texto) {
   let bruto = texto;
   if (bruto === undefined) {
     try { bruto = readFileSync(0, 'utf8'); } catch { bruto = ''; }
   }
-  bruto = bruto.replace(/^﻿/, '').trim();
+  bruto = bruto.replace(/^\uFEFF/, '').trim();
   if (!bruto) return {};
   try {
     return JSON.parse(bruto);
