@@ -1,3 +1,5 @@
+> 🇺🇸 **English edition:** branch [`en`](https://github.com/YellowKode-Academy/claude-code-sua-equipe/tree/en).
+
 # claude-code-sua-equipe
 
 Repositório companion do livro **Claude Code: Sua Equipe de Agentes de IA**, de Kelvin Baumhardt Biffi (série IA na Prática).
