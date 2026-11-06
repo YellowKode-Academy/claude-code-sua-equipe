@@ -10,7 +10,7 @@ export function readInput(text) {
   if (raw === undefined) {
     try { raw = readFileSync(0, 'utf8'); } catch { raw = ''; }
   }
-  raw = raw.replace(/^﻿/, '').trim();
+  raw = raw.replace(/^\uFEFF/, '').trim();
   if (!raw) return {};
   try {
     return JSON.parse(raw);
