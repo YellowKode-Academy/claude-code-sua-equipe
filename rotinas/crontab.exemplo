@@ -1,3 +1,0 @@
-# Rotina diária às 07:30 (macOS e Linux). Instale com: crontab -e  e cole a linha abaixo, trocando o caminho.
-# O PATH do cron é curto: use o caminho completo do node e, se precisar, CLAUDE_BIN com o caminho do claude.
-30 7 * * * cd /caminho/para/claude-code-sua-equipe && /usr/local/bin/node rotinas/rotina-diaria.mjs >> rotinas/logs/cron.log 2>&1

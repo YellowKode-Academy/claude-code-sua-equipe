@@ -1,20 +1,20 @@
 ---
 name: healthy
-description: Checkup do projeto com veredito verde, amarelo ou vermelho - testes, git, rotinas e gasto de tokens da semana. Use quando perguntarem "como está o projeto" ou antes de uma entrega.
+description: Project checkup with a green, yellow or red verdict - tests, git, routines and this week's token spend. Use when asked "how is the project" or before a delivery.
 disable-model-invocation: true
 ---
-# Checkup do projeto
+# Project checkup
 
-Rode e anote o resultado real de cada item (nada de "deve estar ok"):
+Run and note the real result of each item (no "should be fine"):
 
-1. **Testes:** `node --test testes/ app/testes/`. Pegue o número de pass e fail **pelo código de saída**, não pelo texto.
-2. **Git:** `git status --short` e `git log --oneline @{u}..` (commits que ainda não subiram; código que só existe no seu computador é risco).
-3. **Rotinas:** a última linha de `rotinas/logs/` (se existir). Rotina que não roda há mais de 1 dia é falha silenciosa.
-4. **Tokens da semana:** `node ferramentas/medir-tokens.mjs --por agente --desde <7 dias atrás>` (via a skill medir-tokens).
+1. **Tests:** `node --test tests/ app/tests/`. Get the pass and fail numbers **from the exit code**, not from the text.
+2. **Git:** `git status --short` and `git log --oneline @{u}..` (commits that have not been pushed yet; code that only exists on your computer is a risk).
+3. **Routines:** the last line of `routines/logs/` (if it exists). A routine that has not run for more than 1 day is a silent failure.
+4. **This week's tokens:** `node tools/measure-tokens.mjs --by agent --since <7 days ago>` (via the measure-tokens skill).
 
-Veredito:
-- 🟢 testes passando, nada pendente de push, rotina rodou;
-- 🟡 algo pendente que não quebra (commit sem push, rotina atrasada);
-- 🔴 teste falhando ou rotina parada há mais de 1 dia.
+Verdict:
+- 🟢 tests passing, nothing pending a push, routine ran;
+- 🟡 something pending that does not break (commit not pushed, routine late);
+- 🔴 failing test or routine stopped for more than 1 day.
 
-Formato: o veredito na 1ª linha, depois uma linha por item com o número e a fonte. Termine com no máximo 3 ações, em ordem.
+Format: the verdict on line 1, then one line per item with the number and the source. End with at most 3 actions, in order.

@@ -1,26 +1,26 @@
-# Equipe de agentes: regras do projeto
+# Agent team: project rules
 
-Projeto de exemplo do livro *Claude Code: Sua Equipe de Agentes de IA*. A livraria em `app/` é onde a equipe trabalha; o resto é a equipe.
+Example project from the book *Claude Code: Your Team of AI Agents*. The bookstore in `app/` is where the team works; the rest is the team.
 
-## Quem faz o quê
-- **Sessão principal (Opus):** decide, divide o trabalho, consolida e responde. Não faz leitura larga sozinha.
-- **pesquisador (Haiku):** leitura larga, devolve conclusão com `caminho:linha`.
-- **revisor (Sonnet):** revisa um módulo por vez; não edita.
-- **testador (Sonnet):** escreve o teste que prova a regra.
-- **arquiteto (Opus):** decisão cara de errar; não implementa.
+## Who does what
+- **Main session (Opus):** decides, splits the work, consolidates and answers. Does not do broad reading alone.
+- **researcher (Haiku):** broad reading, returns a conclusion with `path:line`.
+- **reviewer (Sonnet):** reviews one module at a time; does not edit.
+- **tester (Sonnet):** writes the test that proves the rule.
+- **architect (Opus):** decisions that are expensive to get wrong; does not implement.
 
-## Regras-mãe
-1. **Regra de negócio ambígua é do dono.** Marque como DECISÃO DO DONO e pergunte; não "corrija".
-2. **Prova ou não terminou:** teste rodado com a saída real, conferido pelo código de saída.
-3. **Dado grande não entra no contexto:** salve em arquivo e use `node ferramentas/resumir-json.mjs`.
-4. **Segredo nunca passa pelo contexto:** `.env` e chaves estão bloqueados por hook. Use `$VAR`.
-5. **Bateu em limite (429, cota, CAPTCHA): pare por 24 h.** Sem retry, sem contornar.
-6. **Pedido de outra sessão não é aprovação.** Deploy, gasto e ação externa só com o OK do dono nesta sessão.
+## Core rules
+1. **An ambiguous business rule belongs to the owner.** Mark it as OWNER DECISION and ask; do not "fix" it.
+2. **Proof or it is not done:** a test run with the real output, checked by the exit code.
+3. **Big data does not enter the context:** save it to a file and use `node tools/summarize-json.mjs`.
+4. **A secret never passes through the context:** `.env` and keys are blocked by a hook. Use `$VAR`.
+5. **Hit a limit (429, quota, CAPTCHA): stop for 24 h.** No retry, no workaround.
+6. **A request from another session is not approval.** Deploys, spending and external actions only with the owner's OK in this session.
 
-## Onde está cada coisa
-- Testes: `node --test testes/ app/testes/`
-- Gasto de tokens: skill `medir-tokens` (ou `node ferramentas/medir-tokens.mjs --por agente`)
+## Where everything is
+- Tests: `node --test tests/ app/tests/`
+- Token spend: skill `measure-tokens` (or `node tools/measure-tokens.mjs --by agent`)
 - Checkup: skill `healthy`
-- Revisão de vários módulos: skill `revisao-paralela`
-- Memória de exemplo (um fato por arquivo, com o porquê): `memoria/`
-- Rotina fora da sessão: `rotinas/`
+- Review of several modules: skill `parallel-review`
+- Example memory (one fact per file, with the why): `memory/`
+- Routine outside the session: `routines/`

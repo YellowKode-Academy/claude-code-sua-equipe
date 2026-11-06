@@ -1,36 +1,36 @@
-// Funções comuns aos hooks. O Claude Code manda um JSON pelo stdin;
-// para barrar uma chamada de ferramenta, o hook sai com código 2 e explica no stderr.
+// Helpers shared by the hooks. Claude Code sends a JSON on stdin;
+// to block a tool call, the hook exits with code 2 and explains on stderr.
 import { readFileSync } from 'node:fs';
 
-// Devolve o objeto lido, {} quando o stdin vem vazio, ou null quando há texto que não é JSON.
-// O BOM (U+FEFF) que o Windows às vezes põe no começo é removido antes: sem isso o JSON.parse
-// falha e um hook de guarda que "libera na dúvida" deixaria passar o comando perigoso.
-export function lerEntrada(texto) {
-  let bruto = texto;
-  if (bruto === undefined) {
-    try { bruto = readFileSync(0, 'utf8'); } catch { bruto = ''; }
+// Returns the parsed object, {} when stdin is empty, or null when there is text that is not JSON.
+// The BOM (U+FEFF) that Windows sometimes puts at the start is stripped first: without that, JSON.parse
+// fails and a guard hook that "allows when in doubt" would let the dangerous command through.
+export function readInput(text) {
+  let raw = text;
+  if (raw === undefined) {
+    try { raw = readFileSync(0, 'utf8'); } catch { raw = ''; }
   }
-  bruto = bruto.replace(/^\uFEFF/, '').trim();
-  if (!bruto) return {};
+  raw = raw.replace(/^﻿/, '').trim();
+  if (!raw) return {};
   try {
-    return JSON.parse(bruto);
+    return JSON.parse(raw);
   } catch {
     return null;
   }
 }
 
-// Hook de guarda: entrada ilegível é motivo para barrar, nunca para liberar.
-export function lerEntradaOuBarrar() {
-  const e = lerEntrada();
-  if (e === null) barrar('Bloqueado: o hook não conseguiu ler a chamada da ferramenta. Na dúvida, um guarda barra.');
+// Guard hook: unreadable input is a reason to block, never to allow.
+export function readInputOrBlock() {
+  const e = readInput();
+  if (e === null) block('Blocked: the hook could not read the tool call. When in doubt, a guard blocks.');
   return e;
 }
 
-export function barrar(motivo) {
-  process.stderr.write(`${motivo}\n`);
+export function block(reason) {
+  process.stderr.write(`${reason}\n`);
   process.exit(2);
 }
 
-export function liberar() {
+export function allow() {
   process.exit(0);
 }

@@ -1,0 +1,20 @@
+# Daily routine in the cloud, with the machine off. Requires the ANTHROPIC_API_KEY secret in the repository
+# (Settings > Secrets and variables > Actions). In a public repository, GitHub turns off the schedule
+# after 60 days without activity.
+name: daily-routine
+on:
+  schedule:
+    - cron: "30 10 * * *" # 10:30 UTC = 07:30 in Brasília
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  checkup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: "Do the project checkup as in the healthy skill and answer with the verdict on the first line. Do not edit anything."
+          claude_args: "--model sonnet --max-turns 15"

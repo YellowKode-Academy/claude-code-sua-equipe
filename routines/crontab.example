@@ -1,0 +1,3 @@
+# Daily routine at 07:30 (macOS and Linux). Install with: crontab -e  and paste the line below, changing the path.
+# cron's PATH is short: use the full path to node and, if needed, CLAUDE_BIN with the path to claude.
+30 7 * * * cd /path/to/claude-code-sua-equipe && /usr/local/bin/node routines/daily-routine.mjs >> routines/logs/cron.log 2>&1
